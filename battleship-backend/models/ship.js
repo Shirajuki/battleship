@@ -1,11 +1,27 @@
 export class Ship {
   constructor() {
     this.placed = false;
+    this.pos = { x: 0, y: 0 };
     this.parts = [{ x: 0, y: 0, shot: false }];
   }
   place(x, y) {
+    if (this.placed) return false;
     this.pos = { x: x, y: y };
     this.placed = true;
+    return true;
+  }
+  shoot(x, y) {
+    for (const part of this.parts) {
+      if (
+        x === this.pos.x + part.x &&
+        y === this.pos.y + part.y &&
+        !part.shot
+      ) {
+        part.shot = true;
+        return true;
+      }
+    }
+    return false;
   }
 }
 

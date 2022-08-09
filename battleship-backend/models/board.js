@@ -37,11 +37,16 @@ export class EnemyBoard extends Board {
   constructor(width, height) {
     super(width, height);
   }
-  update(ships) {
+  update(ships, shots) {
+    // Update board with shots
+    for (const shot of shots) {
+      this.board[shot.y][shot.x] = 2;
+    }
+    // Update board with ships
     for (const ship of ships) {
       if (!ship.placed) continue;
       for (const part of ship.parts) {
-        if (part.shot) this.board[ship.pos.y + part.y][ship.pos.x + part.x] = 1;
+        if (part.shot) this.board[ship.pos.y + part.y][ship.pos.x + part.x] = 3;
       }
     }
   }
