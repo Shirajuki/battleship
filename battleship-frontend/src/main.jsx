@@ -1,5 +1,12 @@
 import { render } from "preact";
-import App from "./app";
-import "./index.css";
+import { Provider } from "unistore/preact";
+import { store } from "./state";
+import App from "./App";
+import "./index.scss";
 
-render(<App />, document.getElementById("app"));
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("app")
+);

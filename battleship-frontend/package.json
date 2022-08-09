@@ -9,8 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.1",
     "preact": "^10.9.0",
-    "socket.io-client": "^4.5.1"
+    "sass": "^1.54.3",
+    "socket.io-client": "^4.5.1",
+    "unistore": "^3.5.2"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.3.0",

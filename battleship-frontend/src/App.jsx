@@ -1,11 +1,15 @@
 import { useState, useEffect } from "preact/hooks";
+import { connect } from "unistore/preact";
 import io from "socket.io-client";
-import "./app.css";
+import { actions } from "./state";
+import Game from "./components/Game";
 
-const App = () => {
+const App = connect(
+  ["count", "room"],
+  actions
+)(({ room }) => {
   const [socket, setSocket] = useState(null);
   const [isConnected, setIsConnected] = useState(socket?.connected ?? false);
-  const [room, setRoom] = useState("room1");
 
   useEffect(() => {
     const newSocket = io(`http://${window.location.hostname}:3000`);
@@ -16,36 +20,31 @@ const App = () => {
   useEffect(() => {
     if (!socket) return;
     socket.on("connect", () => {
-      console.log("connected", socket.id);
       socket.emit("create", room);
       setIsConnected(true);
+      console.log("connected", room, socket.id, isConnected);
     });
 
     socket.on("disconnect", () => {
       setIsConnected(false);
     });
 
-    socket.on("updateBoard", (board) => {
-      console.log(board);
-    });
-
     return () => {
       socket.off("connect");
       socket.off("disconnect");
-      socket.off("updateBoard");
     };
   }, [socket]);
 
-  const sendPing = () => {
+  const joinRoom = () => {
     socket.emit("create", "room1");
   };
 
   return (
     <>
-      <h1>Battleship</h1>
-      <div class="card"></div>
+      <h1>Battleship - {"" + isConnected}</h1>
+      <Game socket={socket} />
     </>
   );
-};
+});
 
 export default App;

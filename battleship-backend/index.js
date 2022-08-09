@@ -17,25 +17,35 @@ const io = new Server(server, {
 const games = [];
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log(`Socket ${socket.id} connected`);
+
   socket.on("create", async (room) => {
     // Check if room is full before joining
     const sockets = await io.in(room).fetchSockets();
     if (sockets.length < 2) socket.join(room);
     const clients = await io.in(room).fetchSockets();
+
     // Initialize battleship game
     if (clients.length === 2) {
       const p1 = new Player(clients[0].id);
       const p2 = new Player(clients[1].id);
       const game = new Game(p1, p2);
       games[room] = game;
+
       // Send initialized board to players
+      game.placeShip({ shipIndex: 1, pos: { x: 5, y: 5 }, playerId: p1.id });
+      game.placeShip({ shipIndex: 1, pos: { x: 5, y: 2 }, playerId: p2.id });
+      game.updateBoards();
+      game.shootShip({ pos: { x: 5, y: 2 }, playerId: p1.id });
       game.updateBoards();
       game.displayBoards();
-      io.to(room).emit("updateBoard", JSON.stringify(game.p1));
+      //io.to(room).emit("updateBoard", JSON.stringify(game.p1));
+      clients[0].emit("updateBoard", JSON.stringify(game.p1));
+      clients[1].emit("updateBoard", JSON.stringify(game.p2));
     }
     console.log(clients.map((s) => s.id));
   });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
   });

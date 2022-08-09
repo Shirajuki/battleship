@@ -23,8 +23,8 @@ class Game {
       return board[y][x] == "0";
     return false;
   }
-  placeShip({ shipIndex, pos, playerID }) {
-    if (!this.checkPlayerTurn(playerID)) return { error: 0 };
+  placeShip({ shipIndex, pos, playerId }) {
+    if (!this.checkPlayerTurn(playerId)) return { error: 0 };
 
     const ship = this.getPlayerByTurn().ships[shipIndex];
     // Check can be placed
@@ -40,8 +40,8 @@ class Game {
       return board[y][x] == "0";
     return false;
   }
-  shootShip({ pos, playerID }) {
-    if (!this.checkPlayerTurn(playerID)) return { error: 0 };
+  shootShip({ pos, playerId }) {
+    if (!this.checkPlayerTurn(playerId)) return { error: 0 };
 
     const ship = this.getEnemyByTurn().ships.find((ship) => {
       for (const part of ship.parts)
@@ -54,10 +54,10 @@ class Game {
     this.turn = (this.turn + 1) % 2;
     const shot = ship?.shoot(pos.x, pos.y);
     if (shot) {
-      console.log(playerID, "hit", pos);
+      console.log(playerId, "hit", pos);
       return {};
     } else {
-      console.log(playerID, "missed", pos);
+      console.log(playerId, "missed", pos);
       return {};
     }
   }
