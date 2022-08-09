@@ -17,6 +17,7 @@ const Board = ({ board, className }) => {
           {board[y][x] === 1 && <Ship />}
           {board[y][x] === 2 && <Marker hit={false} />}
           {board[y][x] === 3 && <Marker hit={true} />}
+          {board[y][x] === 4 && <Ship hit={true} />}
         </BoardSquare>
       </div>
     );
