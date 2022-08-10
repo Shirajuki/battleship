@@ -15,6 +15,15 @@ const io = new Server(server, {
   },
 });
 const games = [];
+const finishTurn = (game, clients) => {
+  // Update players turn
+
+  // Update boards
+  game.updateBoards();
+  game.displayBoards();
+  clients[0].emit("updateBoard", JSON.stringify(game.p1));
+  clients[1].emit("updateBoard", JSON.stringify(game.p2));
+};
 
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected`);
@@ -44,6 +53,28 @@ io.on("connection", (socket) => {
       clients[1].emit("updateBoard", JSON.stringify(game.p2));
     }
     console.log(clients.map((s) => s.id));
+  });
+
+  socket.on("place", async (data) => {
+    const { room, ...placeData } = data;
+    const clients = await io.in(room).fetchSockets();
+
+    if ([...socket.rooms].includes(room)) {
+      const game = games[room];
+      game.placeShip(placeData);
+      finishTurn(game, clients);
+    }
+  });
+
+  socket.on("shoot", async (data) => {
+    const { room, ...shootData } = data;
+    const clients = await io.in(room).fetchSockets();
+
+    if ([...socket.rooms].includes(room)) {
+      const game = games[room];
+      game.shootShip(shootData);
+      finishTurn(game, clients);
+    }
   });
 
   socket.on("disconnect", () => {

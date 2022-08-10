@@ -5,10 +5,9 @@ import { actions } from "./state";
 import Game from "./components/Game";
 
 const App = connect(
-  ["count", "room"],
+  ["socket", "room"],
   actions
-)(({ room }) => {
-  const [socket, setSocket] = useState(null);
+)(({ socket, room, setSocket }) => {
   const [isConnected, setIsConnected] = useState(socket?.connected ?? false);
 
   useEffect(() => {

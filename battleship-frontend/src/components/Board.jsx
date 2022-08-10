@@ -8,18 +8,17 @@ const Board = ({ board, className }) => {
       null,
       board.map((b) => b?.length ?? 0)
     ) * board.length;
+
   const renderSquare = (i) => {
     const y = Math.floor(i / board.length);
     const x = i % board[0]?.length;
     return (
-      <div key={i} class="boardSquare">
-        <BoardSquare x={x} y={y}>
-          {board[y][x] === 1 && <Ship />}
-          {board[y][x] === 2 && <Marker hit={false} />}
-          {board[y][x] === 3 && <Marker hit={true} />}
-          {board[y][x] === 4 && <Ship hit={true} />}
-        </BoardSquare>
-      </div>
+      <BoardSquare key={i} x={x} y={y}>
+        {board[y][x] === 1 && <Ship />}
+        {board[y][x] === 2 && <Marker hit={false} />}
+        {board[y][x] === 3 && <Marker hit={true} />}
+        {board[y][x] === 4 && <Ship hit={true} />}
+      </BoardSquare>
     );
   };
   if (board.length === 0) return <></>;
