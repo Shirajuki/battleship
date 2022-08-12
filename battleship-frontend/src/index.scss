@@ -61,6 +61,16 @@ body {
     border: 6px double #1a1a1a;
     padding: 2px;
     &.playerBoard {
+      border-color: tomato;
+    }
+    &.enemyBoard {
+      border-color: lime;
+    }
+    &.bigBoard {
+      width: 500px;
+      height: 500px;
+    }
+    &.smallBoard {
       order: 1;
       margin-left: 10px;
       width: 250px;
@@ -68,10 +78,6 @@ body {
       .boardSquare {
         border-radius: 2.5px;
       }
-    }
-    &.enemyBoard {
-      width: 500px;
-      height: 500px;
     }
 
     .boardSquare {

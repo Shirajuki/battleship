@@ -8,6 +8,7 @@ class Player {
     this.enemyBoard = new EnemyBoard(10, 10);
     this.ships = [new Ship(), new BigShip(), new SmallShip()];
     this.shots = [];
+    this.placing = true;
   }
 }
 export default Player;

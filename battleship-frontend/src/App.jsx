@@ -1,7 +1,7 @@
 import { useState, useEffect } from "preact/hooks";
 import { connect } from "unistore/preact";
 import io from "socket.io-client";
-import { actions } from "./state";
+import { actions } from "./lib/state";
 import Game from "./components/Game";
 
 const App = connect(
@@ -9,6 +9,7 @@ const App = connect(
   actions
 )(({ socket, room, setSocket }) => {
   const [isConnected, setIsConnected] = useState(socket?.connected ?? false);
+  const [gameStarted, setGameStarted] = useState(false);
 
   useEffect(() => {
     const newSocket = io(`http://${window.location.hostname}:3000`);
@@ -21,7 +22,16 @@ const App = connect(
     socket.on("connect", () => {
       socket.emit("create", room);
       setIsConnected(true);
-      console.log("connected", room, socket.id, isConnected);
+      console.log("connected", room, socket.id);
+    });
+
+    socket.on("startGame", () => {
+      setGameStarted(true);
+      console.log("STAAART", isConnected, gameStarted);
+    });
+
+    socket.on("endGame", () => {
+      setGameStarted(false);
     });
 
     socket.on("disconnect", () => {
@@ -30,6 +40,8 @@ const App = connect(
 
     return () => {
       socket.off("connect");
+      socket.off("startGame");
+      socket.off("endGame");
       socket.off("disconnect");
     };
   }, [socket]);
@@ -41,7 +53,7 @@ const App = connect(
   return (
     <>
       <h1>Battleship - {"" + isConnected}</h1>
-      <Game socket={socket} />
+      <Game socket={socket} room={room} />
     </>
   );
 });

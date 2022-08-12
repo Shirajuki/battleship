@@ -1,10 +1,11 @@
 import { useState, useEffect, useReducer } from "preact/hooks";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import Battleship from "../battleship.js";
+import Battleship from "../lib/battleship.js";
 import Board from "./Board";
+import PlayerHand from "./PlayerHand";
 
-const Game = ({ socket }) => {
-  const [game] = useState(new Battleship());
+const Game = ({ socket, room }) => {
+  const [game] = useState(new Battleship(room));
   const [, rerender] = useReducer((x) => x + 1, 0);
   const [parent] = useAutoAnimate();
 
@@ -24,8 +25,13 @@ const Game = ({ socket }) => {
     <div ref={parent}>
       <p>Player - {game.playerId}</p>
       <div class="boardWrapper">
-        <Board className={"playerBoard"} board={game.playerBoard} />
-        <Board className={"enemyBoard"} board={game.enemyBoard} />
+        <PlayerHand ships={game.ships} />
+        <Board
+          type={"playerBoard"}
+          board={game.playerBoard}
+          state={game.state}
+        />
+        <Board type={"enemyBoard"} board={game.enemyBoard} state={game.state} />
       </div>
     </div>
   );

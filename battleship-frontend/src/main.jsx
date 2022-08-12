@@ -1,6 +1,6 @@
 import { render } from "preact";
 import { Provider } from "unistore/preact";
-import { store } from "./state";
+import { store } from "./lib/state";
 import App from "./App";
 import "./index.scss";
 

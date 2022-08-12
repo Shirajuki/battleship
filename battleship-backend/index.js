@@ -15,14 +15,31 @@ const io = new Server(server, {
   },
 });
 const games = [];
+const updateBoards = (game, clients) => {
+  game.updateBoards();
+  clients[0].emit(
+    "updateBoard",
+    JSON.stringify({
+      ...game.p1,
+      turn: game.checkPlayerTurn(game.p1.id),
+      state: game.phase,
+    })
+  );
+  clients[1].emit(
+    "updateBoard",
+    JSON.stringify({
+      ...game.p2,
+      turn: game.checkPlayerTurn(game.p2.id),
+      state: game.phase,
+    })
+  );
+};
 const finishTurn = (game, clients) => {
-  // Update players turn
+  // Check win
+  game.checkWin();
 
   // Update boards
-  game.updateBoards();
-  game.displayBoards();
-  clients[0].emit("updateBoard", JSON.stringify(game.p1));
-  clients[1].emit("updateBoard", JSON.stringify(game.p2));
+  updateBoards(game, clients);
 };
 
 io.on("connection", (socket) => {
@@ -31,26 +48,33 @@ io.on("connection", (socket) => {
   socket.on("create", async (room) => {
     // Check if room is full before joining
     const sockets = await io.in(room).fetchSockets();
-    if (sockets.length < 2) socket.join(room);
+    if (sockets.length >= 2) return;
+    // Join and check if clients enough
+    socket.join(room);
     const clients = await io.in(room).fetchSockets();
-
+    console.log(clients.length);
     // Initialize battleship game
-    if (clients.length === 2) {
+    if (clients.length >= 2) {
       const p1 = new Player(clients[0].id);
       const p2 = new Player(clients[1].id);
       const game = new Game(p1, p2);
       games[room] = game;
 
       // Send initialized board to players
-      game.placeShip({ shipIndex: 1, pos: { x: 5, y: 5 }, playerId: p1.id });
-      game.placeShip({ shipIndex: 1, pos: { x: 5, y: 2 }, playerId: p2.id });
+      game.placeShip({ shipIndex: 0, pos: { x: 5, y: 5 }, playerId: p1.id });
+      game.placeShip({ shipIndex: 1, pos: { x: 5, y: 6 }, playerId: p1.id });
+      game.placeShip({ shipIndex: 2, pos: { x: 5, y: 7 }, playerId: p1.id });
+      game.endPlace({ playerId: p1.id });
+      game.placeShip({ shipIndex: 0, pos: { x: 3, y: 5 }, playerId: p2.id });
+      game.placeShip({ shipIndex: 1, pos: { x: 3, y: 6 }, playerId: p2.id });
+      game.placeShip({ shipIndex: 2, pos: { x: 3, y: 7 }, playerId: p2.id });
+      game.endPlace({ playerId: p2.id });
       game.updateBoards();
-      game.shootShip({ pos: { x: 5, y: 2 }, playerId: p1.id });
-      game.updateBoards();
-      game.displayBoards();
-      //io.to(room).emit("updateBoard", JSON.stringify(game.p1));
-      clients[0].emit("updateBoard", JSON.stringify(game.p1));
-      clients[1].emit("updateBoard", JSON.stringify(game.p2));
+
+      // Send game start signal
+      io.to(room).emit("startGame");
+      // Send update boards to players
+      updateBoards(game, clients);
     }
     console.log(clients.map((s) => s.id));
   });
@@ -61,8 +85,7 @@ io.on("connection", (socket) => {
 
     if ([...socket.rooms].includes(room)) {
       const game = games[room];
-      game.placeShip(placeData);
-      finishTurn(game, clients);
+      if (game.placeShip(placeData)?.status) finishTurn(game, clients);
     }
   });
 
@@ -72,8 +95,17 @@ io.on("connection", (socket) => {
 
     if ([...socket.rooms].includes(room)) {
       const game = games[room];
-      game.shootShip(shootData);
-      finishTurn(game, clients);
+      if (game.shootShip(shootData)?.status) finishTurn(game, clients);
+    }
+  });
+
+  socket.on("endPlace", async (data) => {
+    const { room, ...playerId } = data;
+    const clients = await io.in(room).fetchSockets();
+
+    if ([...socket.rooms].includes(room)) {
+      const game = games[room];
+      if (game.endPlace(playerId)?.status) finishTurn(game, clients);
     }
   });
 
