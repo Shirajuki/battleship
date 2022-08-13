@@ -32,11 +32,24 @@ const Board = connect(
     const shipIndex = game.getShipIndex(x, y);
 
     return (
-      <BoardSquare key={i} onClick={eventHandler} id={`${type}-${x}-${y}`}>
-        {board[y][x] === 1 && <Ship index={i} id={shipIndex} />}
+      <BoardSquare
+        key={i}
+        onClick={eventHandler}
+        id={`${type}-${x}-${y}`}
+        droppable={game.state === gameState.place}
+      >
+        {board[y][x] === 1 && (
+          <Ship
+            index={i}
+            id={shipIndex}
+            drag={game.state === gameState.place}
+          />
+        )}
         {board[y][x] === 2 && <Marker hit={false} />}
         {board[y][x] === 3 && <Marker hit={true} />}
-        {board[y][x] === 4 && <Ship hit={true} index={i} id={shipIndex} />}
+        {board[y][x] === 4 && (
+          <Ship hit={true} index={i} id={shipIndex} drag={false} />
+        )}
       </BoardSquare>
     );
   };

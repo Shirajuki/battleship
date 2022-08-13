@@ -96,9 +96,6 @@ body {
         &.hit {
           color: tomato;
         }
-        & > div {
-          transform: translate(0, 0) !important;
-        }
       }
       .marker {
         &.hit {

@@ -1,6 +1,13 @@
 import { Droppable } from "react-beautiful-dnd";
 
-const BoardSquare = ({ children, onClick, id }) => {
+const BoardSquare = ({ children, onClick, id, droppable }) => {
+  if (!droppable)
+    return (
+      <div class="boardSquare" onClick={onClick}>
+        <div>{children}</div>
+      </div>
+    );
+
   return (
     <Droppable droppableId={id}>
       {(provided) => (

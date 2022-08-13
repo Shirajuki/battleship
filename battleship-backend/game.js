@@ -27,19 +27,41 @@ class Game {
     return this.turn === 1 ? this.p1 : this.p2;
   }
 
-  canPlace(x, y) {
+  canPlace(ship, x, y) {
     const board = this.getPlayerByTurn().playerBoard.board;
     if (this.phase !== phase.place) return false;
-    if (y < board.length && y >= 0 && x < board[y].length && x >= 0)
-      return board[y][x] == "0";
-    return false;
+    // Check every part of ship is in board
+    if (
+      !ship.parts.every(
+        (part) =>
+          y + part.y < board.length &&
+          y + part.y >= 0 &&
+          x + part.x < board[y + part.y]?.length &&
+          x + part.x >= 0
+      )
+    )
+      return false;
+    // Check ship parts with all other ships
+    const placedShips = this.getPlayerByTurn().ships.filter(
+      (s) => s.placed && s != ship
+    );
+    const shipPlacements = !placedShips.some((sh) =>
+      sh.parts.some((p) =>
+        ship.parts.some(
+          (part) =>
+            x + part.x === sh.pos.x + p.x && y + part.y === sh.pos.y + p.y
+        )
+      )
+    );
+    console.log(shipPlacements, x, y, ship);
+    return shipPlacements;
   }
   placeShip({ shipIndex, pos, playerId }) {
     if (this.phase !== phase.place) return { status: 0 };
 
     const ship = this.getPlayerById(playerId).ships[shipIndex];
     // Check can be placed
-    if (!this.canPlace(pos.x, pos.y)) return { status: 0 };
+    if (!this.canPlace(ship, pos.x, pos.y)) return { status: 0 };
     ship?.place(pos.x, pos.y);
     return { status: 1 };
   }
@@ -94,13 +116,15 @@ class Game {
     );
 
     if (p1) {
-      console.log(this.p1.id);
-      this.phase = phase.end;
-    } else if (p2) {
       console.log(this.p2.id);
       this.phase = phase.end;
+      return { player: this.p2.id };
+    } else if (p2) {
+      console.log(this.p1.id);
+      this.phase = phase.end;
+      return { player: this.p1.id };
     } else {
-      console.log("None");
+      console.log("No win");
     }
   }
 

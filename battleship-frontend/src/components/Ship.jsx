@@ -1,6 +1,12 @@
 import { Draggable } from "react-beautiful-dnd";
 
-const Ship = ({ hit, index, id }) => {
+const Ship = ({ hit, index, id, drag = false }) => {
+  if (!drag)
+    return (
+      <div class={`ship ${hit ? "hit" : ""}`}>
+        <p>Ship</p>
+      </div>
+    );
   return (
     <div class={`ship ${hit ? "hit" : ""}`}>
       <Draggable draggableId={"ship" + id} index={index}>

@@ -30,8 +30,9 @@ const App = connect(
       console.log("STAAART", isConnected, gameStarted);
     });
 
-    socket.on("endGame", () => {
+    socket.on("endGame", (status) => {
       setGameStarted(false);
+      console.log("GAMEEE ENDD", status);
     });
 
     socket.on("disconnect", () => {

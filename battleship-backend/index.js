@@ -36,7 +36,11 @@ const updateBoards = (game, clients) => {
 };
 const finishTurn = (game, clients) => {
   // Check win
-  game.checkWin();
+  const win = game.checkWin();
+  if (win) {
+    clients[0].emit("endGame", win?.player === game.p1.id ? "win" : "lose");
+    clients[1].emit("endGame", win?.player === game.p2.id ? "win" : "lose");
+  }
 
   // Update boards
   updateBoards(game, clients);
