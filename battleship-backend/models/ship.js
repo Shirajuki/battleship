@@ -1,11 +1,10 @@
 export class Ship {
   constructor() {
     this.placed = false;
-    this.pos = { x: 0, y: 0 };
+    this.pos = { x: -5, y: -5 };
     this.parts = [{ x: 0, y: 0, shot: false }];
   }
   place(x, y) {
-    if (this.placed) return false;
     this.pos = { x: x, y: y };
     this.placed = true;
     return true;

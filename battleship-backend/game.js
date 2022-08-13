@@ -29,6 +29,7 @@ class Game {
 
   canPlace(x, y) {
     const board = this.getPlayerByTurn().playerBoard.board;
+    if (this.phase !== phase.place) return false;
     if (y < board.length && y >= 0 && x < board[y].length && x >= 0)
       return board[y][x] == "0";
     return false;

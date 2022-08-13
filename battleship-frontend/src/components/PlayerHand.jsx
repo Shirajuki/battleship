@@ -1,27 +1,25 @@
 import { connect } from "unistore/preact";
 import { actions } from "../lib/state";
-import { selectionType } from "../lib/constants";
 import { endPlace } from "../lib/actions";
+import { Droppable } from "react-beautiful-dnd";
+import ShipDraggable from "./ShipDraggable";
 
 const PlayerHand = connect(
-  ["socket", "room", "selection"],
+  ["socket", "room"],
   actions
-)(({ socket, room, ships, selection, setSelection }) => {
-  console.log(selection);
+)(({ socket, room, ships }) => {
   return (
     <div>
-      {ships.map((ship, index) => {
-        if (!ship.placed)
-          return (
-            <div
-              onClick={() =>
-                setSelection({ type: selectionType.ship, index: index })
-              }
-            >
-              <p>a ship - {index}</p>
-            </div>
-          );
-      })}
+      <Droppable droppableId={"hand"}>
+        {(provided) => (
+          <div ref={provided.innerRef} {...provided.droppableProps}>
+            {ships.map((ship, index) => {
+              if (!ship.placed) return <ShipDraggable index={index} />;
+            })}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
       <button onClick={() => endPlace(socket, room)}>end turn</button>
     </div>
   );

@@ -61,6 +61,7 @@ io.on("connection", (socket) => {
       games[room] = game;
 
       // Send initialized board to players
+      /*
       game.placeShip({ shipIndex: 0, pos: { x: 5, y: 5 }, playerId: p1.id });
       game.placeShip({ shipIndex: 1, pos: { x: 5, y: 6 }, playerId: p1.id });
       game.placeShip({ shipIndex: 2, pos: { x: 5, y: 7 }, playerId: p1.id });
@@ -70,6 +71,7 @@ io.on("connection", (socket) => {
       game.placeShip({ shipIndex: 2, pos: { x: 3, y: 7 }, playerId: p2.id });
       game.endPlace({ playerId: p2.id });
       game.updateBoards();
+      */
 
       // Send game start signal
       io.to(room).emit("startGame");

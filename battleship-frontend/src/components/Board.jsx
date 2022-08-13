@@ -3,16 +3,16 @@ import { actions } from "../lib/state";
 import BoardSquare from "./BoardSquare";
 import Marker from "./Marker";
 import Ship from "./Ship";
-import { shoot, place } from "../lib/actions";
-import { gameState, selectionType } from "../lib/constants";
+import { shoot } from "../lib/actions";
+import { gameState } from "../lib/constants";
 
 const Board = connect(
-  ["socket", "room", "selection"],
+  ["socket", "room"],
   actions
-)(({ type, board, state, socket, room, selection, setSelection }) => {
-  let boardStyle = state === gameState.place ? "smallBoard" : "bigBoard";
+)(({ type, board, game, socket, room }) => {
+  let boardStyle = game.state === gameState.place ? "smallBoard" : "bigBoard";
   if (type === "playerBoard")
-    boardStyle = state === gameState.place ? "bigBoard" : "smallBoard";
+    boardStyle = game.state === gameState.place ? "bigBoard" : "smallBoard";
   const boardLength =
     Math.max.apply(
       null,
@@ -24,20 +24,19 @@ const Board = connect(
     const x = i % board[0]?.length;
 
     const eventHandler = (_event) => {
-      if (state === 0 && selection?.type === selectionType.ship) {
-        place(socket, room, { x: x, y: y }, selection.index);
-        setSelection(null);
-      } else if (state === 1) {
+      if (game.state === gameState.shoot) {
         shoot(socket, room, { x: x, y: y });
       }
     };
 
+    const shipIndex = game.getShipIndex(x, y);
+
     return (
-      <BoardSquare key={i} onClick={eventHandler}>
-        {board[y][x] === 1 && <Ship />}
+      <BoardSquare key={i} onClick={eventHandler} id={`${type}-${x}-${y}`}>
+        {board[y][x] === 1 && <Ship index={i} id={shipIndex} />}
         {board[y][x] === 2 && <Marker hit={false} />}
         {board[y][x] === 3 && <Marker hit={true} />}
-        {board[y][x] === 4 && <Ship hit={true} />}
+        {board[y][x] === 4 && <Ship hit={true} index={i} id={shipIndex} />}
       </BoardSquare>
     );
   };

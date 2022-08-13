@@ -12,6 +12,14 @@ class Board {
       this.board[i] = new Array(width).fill(0);
     }
   }
+  update() {
+    // clear board
+    for (let y = 0; y < this.board.length; y++) {
+      for (let x = 0; x < this.board[y]?.length; x++) {
+        this.board[y][x] = "0";
+      }
+    }
+  }
   draw() {
     console.log();
     this.board.forEach((row) => {
@@ -25,6 +33,7 @@ export class PlayerBoard extends Board {
     super(width, height);
   }
   update(ships) {
+    super.update();
     for (const ship of ships) {
       if (!ship.placed) continue;
       for (const part of ship.parts) {
@@ -40,6 +49,7 @@ export class EnemyBoard extends Board {
     super(width, height);
   }
   update(ships, shots) {
+    super.update();
     // Update board with shots
     for (const shot of shots) {
       this.board[shot.y][shot.x] = 2;

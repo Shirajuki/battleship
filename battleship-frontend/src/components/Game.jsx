@@ -3,6 +3,9 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import Battleship from "../lib/battleship.js";
 import Board from "./Board";
 import PlayerHand from "./PlayerHand";
+import { place } from "../lib/actions";
+import { DragDropContext } from "react-beautiful-dnd";
+import { gameState } from "../lib/constants.js";
 
 const Game = ({ socket, room }) => {
   const [game] = useState(new Battleship(room));
@@ -21,19 +24,27 @@ const Game = ({ socket, room }) => {
     };
   }, [socket]);
 
+  const onDragEnd = ({ draggableId, type, reason, source, destination }) => {
+    console.log(draggableId, type, reason, source, destination);
+
+    const data = destination?.droppableId?.split("-");
+    const index = +draggableId?.replace("ship", "");
+    console.log(data, index);
+    if (data && !isNaN(index) && game.state === gameState.place)
+      place(socket, room, { x: +data[1], y: +data[2] }, index);
+  };
+
   return (
-    <div ref={parent}>
-      <p>Player - {game.playerId}</p>
-      <div class="boardWrapper">
-        <PlayerHand ships={game.ships} />
-        <Board
-          type={"playerBoard"}
-          board={game.playerBoard}
-          state={game.state}
-        />
-        <Board type={"enemyBoard"} board={game.enemyBoard} state={game.state} />
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div ref={parent}>
+        <p>Player - {game.playerId}</p>
+        <div class="boardWrapper">
+          <PlayerHand ships={game.ships} />
+          <Board type={"playerBoard"} game={game} board={game.playerBoard} />
+          <Board type={"enemyBoard"} game={game} board={game.enemyBoard} />
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 

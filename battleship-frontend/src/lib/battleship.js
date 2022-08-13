@@ -23,4 +23,10 @@ export default class Battleship {
     this.state = state; // Update game state/phase
     console.log(turn, state);
   }
+
+  getShipIndex(x, y) {
+    return this.ships.findIndex((s, i) =>
+      s.parts.some((p) => x === s.pos.x + p.x && y === s.pos.y + p.y)
+    );
+  }
 }
