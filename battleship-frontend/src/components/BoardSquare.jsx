@@ -1,27 +1,18 @@
-import { Droppable } from "react-beautiful-dnd";
+import { useDrop } from "react-dnd";
 
-const BoardSquare = ({ children, onClick, id, droppable }) => {
-  if (!droppable)
-    return (
-      <div class="boardSquare" onClick={onClick}>
-        <div>{children}</div>
-      </div>
-    );
+const BoardSquare = ({ children, onClick, onDrop, id, droppable }) => {
+  const [{ isOver }, dropRef] = useDrop({
+    accept: "ship",
+    drop: (item) => onDrop(item, id),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
 
   return (
-    <Droppable droppableId={id}>
-      {(provided) => (
-        <div
-          class="boardSquare"
-          onClick={onClick}
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-        >
-          <div>{children}</div>
-          <span style={{ display: "none" }}>{provided.placeholder}</span>
-        </div>
-      )}
-    </Droppable>
+    <div class="boardSquare" ref={droppable ? dropRef : null} onClick={onClick}>
+      <div>{children}</div>
+    </div>
   );
 };
 export default BoardSquare;

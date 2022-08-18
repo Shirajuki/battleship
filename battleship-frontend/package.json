@@ -11,7 +11,8 @@
   "dependencies": {
     "@formkit/auto-animate": "^1.0.0-beta.1",
     "preact": "^10.9.0",
-    "react-beautiful-dnd": "^13.1.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "sass": "^1.54.3",
     "socket.io-client": "^4.5.1",
     "unistore": "^3.5.2"

@@ -3,9 +3,8 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import Battleship from "../lib/battleship.js";
 import Board from "./Board";
 import PlayerHand from "./PlayerHand";
-import { place } from "../lib/actions";
-import { DragDropContext } from "react-beautiful-dnd";
-import { gameState } from "../lib/constants.js";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const Game = ({ socket, room }) => {
   const [game] = useState(new Battleship(room));
@@ -24,18 +23,8 @@ const Game = ({ socket, room }) => {
     };
   }, [socket]);
 
-  const onDragEnd = ({ draggableId, type, reason, source, destination }) => {
-    console.log(draggableId, type, reason, source, destination);
-
-    const data = destination?.droppableId?.split("-");
-    const index = +draggableId?.replace("ship", "");
-    console.log(data, index);
-    if (data && !isNaN(index) && game.state === gameState.place)
-      place(socket, room, { x: +data[1], y: +data[2] }, index);
-  };
-
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DndProvider backend={HTML5Backend}>
       <div ref={parent}>
         <p>Player - {game.playerId}</p>
         <div class="boardWrapper">
@@ -44,7 +33,7 @@ const Game = ({ socket, room }) => {
           <Board type={"enemyBoard"} game={game} board={game.enemyBoard} />
         </div>
       </div>
-    </DragDropContext>
+    </DndProvider>
   );
 };
 

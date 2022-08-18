@@ -32,8 +32,13 @@ export class PlayerBoard extends Board {
   constructor(width, height) {
     super(width, height);
   }
-  update(ships) {
+  update(ships, enemyShots) {
     super.update();
+    // Update board with enemy shots
+    for (const shot of enemyShots) {
+      this.board[shot.y][shot.x] = 2;
+    }
+    // Update board with ships
     for (const ship of ships) {
       if (!ship.placed) continue;
       for (const part of ship.parts) {

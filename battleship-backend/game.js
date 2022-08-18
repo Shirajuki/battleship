@@ -129,9 +129,9 @@ class Game {
   }
 
   updateBoards() {
-    this.p1.playerBoard.update(this.p1.ships);
+    this.p1.playerBoard.update(this.p1.ships, this.p2.shots);
     this.p1.enemyBoard.update(this.p2.ships, this.p1.shots);
-    this.p2.playerBoard.update(this.p2.ships);
+    this.p2.playerBoard.update(this.p2.ships, this.p1.shots);
     this.p2.enemyBoard.update(this.p1.ships, this.p2.shots);
   }
 

@@ -3,7 +3,7 @@ import { actions } from "../lib/state";
 import BoardSquare from "./BoardSquare";
 import Marker from "./Marker";
 import Ship from "./Ship";
-import { shoot } from "../lib/actions";
+import { place, shoot } from "../lib/actions";
 import { gameState } from "../lib/constants";
 
 const Board = connect(
@@ -28,6 +28,12 @@ const Board = connect(
         shoot(socket, room, { x: x, y: y });
       }
     };
+    const dropHandler = (item, id) => {
+      const data = id.split("-");
+      console.log(item, data);
+      if (game.state === gameState.place)
+        place(socket, room, { x: +data[1], y: +data[2] }, item.index);
+    };
 
     const shipIndex = game.getShipIndex(x, y);
 
@@ -37,23 +43,25 @@ const Board = connect(
         onClick={eventHandler}
         id={`${type}-${x}-${y}`}
         droppable={game.state === gameState.place}
+        onDrop={dropHandler}
       >
         {board[y][x] === 1 && (
           <Ship
-            index={i}
-            id={shipIndex}
+            draggable
+            index={shipIndex}
             drag={game.state === gameState.place}
           />
         )}
         {board[y][x] === 2 && <Marker hit={false} />}
         {board[y][x] === 3 && <Marker hit={true} />}
         {board[y][x] === 4 && (
-          <Ship hit={true} index={i} id={shipIndex} drag={false} />
+          <Ship hit={true} index={shipIndex} drag={false} />
         )}
       </BoardSquare>
     );
   };
   if (board.length === 0) return <></>;
+
   const squares = Array.from(new Array(boardLength), (_, index) =>
     renderSquare(index)
   );

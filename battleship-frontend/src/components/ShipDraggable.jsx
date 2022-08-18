@@ -1,19 +1,19 @@
-import { Draggable } from "react-beautiful-dnd";
+import { useDrag } from "react-dnd";
 
 const ShipDraggable = ({ index }) => {
-  console.log(111, index);
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "ship",
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
   return (
-    <Draggable draggableId={"ship" + index} index={index}>
-      {(provided) => (
-        <div
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
-        >
-          <p>a ship - {index}</p>
-        </div>
-      )}
-    </Draggable>
+    <div ref={dragRef}>
+      <p>
+        a ship - {index} {isDragging && "😱"}
+      </p>
+    </div>
   );
 };
 export default ShipDraggable;

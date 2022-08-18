@@ -28,7 +28,8 @@ A Work In Progress multiplayer websocket Battleship game ⚓
 
 ## TODO
 
-- [ ] Fix DnD library to be more lightweight
+- [x] Fix DnD library to be more lightweight
+- [ ] Style the game better overall
 - [ ] Add sfx and bgm music
 - [ ] Add images web friendly assets
 - [ ] Add a lobby menu
