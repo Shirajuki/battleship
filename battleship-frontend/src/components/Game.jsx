@@ -8,7 +8,6 @@ const Game = ({ game }) => {
 
   return (
     <div ref={parent}>
-      <p>Player - {game.playerId}</p>
       <div class="boardWrapper">
         <PlayerBoard game={game} board={game.playerBoard} />
         <EnemyBoard game={game} board={game.enemyBoard} />

@@ -23,6 +23,25 @@ const App = connect(
     socket.emit("create", room);
   };
 
+  const displayState = (state) => {
+    switch (state) {
+      case gameState.place:
+        return "Place phase";
+      case gameState.shoot:
+        return "Shoot phase";
+      case gameState.end:
+        return "End phase";
+      default:
+        return "Battleship";
+    }
+  };
+
+  const displayStatus = (game) => {
+    if (game.state === gameState.shoot)
+      return game.playerTurn ? "Your turn" : "Enemy turn";
+    return ""; // TODO: add end turn display
+  };
+
   useEffect(() => {
     const newSocket = io(`http://${window.location.hostname}:3000`);
     setSocket(newSocket);
@@ -82,7 +101,8 @@ const App = connect(
           <PlayerHand ships={game.ships} />
         )}
         <div class="game">
-          <h1>Battleship - {"" + isConnected}</h1>
+          <h1>{displayState(game?.state)}</h1>
+          {gameStarted && game && <p>{displayStatus(game)}</p>}
           <Game game={game} />
         </div>
         {gameStarted && game && <div class="room">{room}</div>}
