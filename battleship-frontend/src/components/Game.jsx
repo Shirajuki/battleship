@@ -1,39 +1,19 @@
-import { useState, useEffect, useReducer } from "preact/hooks";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import Battleship from "../lib/battleship.js";
 import EnemyBoard from "./EnemyBoard";
 import PlayerBoard from "./PlayerBoard";
-import PlayerHand from "./PlayerHand";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 
-const Game = ({ socket, room }) => {
-  const [game] = useState(new Battleship(room));
-  const [, rerender] = useReducer((x) => x + 1, 0);
+const Game = ({ game }) => {
   const [parent] = useAutoAnimate();
-
-  useEffect(() => {
-    if (!socket) return;
-    socket.on("updateBoard", (board) => {
-      game.updateBoards(JSON.parse(board));
-      rerender();
-    });
-    return () => {
-      socket.off("updateBoard");
-    };
-  }, [socket]);
+  if (!game) return <></>;
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div ref={parent}>
-        <p>Player - {game.playerId}</p>
-        <div class="boardWrapper">
-          <PlayerHand ships={game.ships} />
-          <PlayerBoard game={game} board={game.playerBoard} />
-          <EnemyBoard game={game} board={game.enemyBoard} />
-        </div>
+    <div ref={parent}>
+      <p>Player - {game.playerId}</p>
+      <div class="boardWrapper">
+        <PlayerBoard game={game} board={game.playerBoard} />
+        <EnemyBoard game={game} board={game.enemyBoard} />
       </div>
-    </DndProvider>
+    </div>
   );
 };
 

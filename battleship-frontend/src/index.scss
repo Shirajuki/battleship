@@ -1,5 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=DynaPuff:wght@400;700&family=Permanent+Marker&display=swap");
 :root {
-  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+  --font-normal: "DynaPuff", cursive;
+  --font-fancy: "Permanent Marker", cursive;
+  font-family: var(--font-normal);
   font-size: 16px;
   line-height: 24px;
   font-weight: 400;
@@ -23,6 +26,11 @@ a {
     color: #535bf2;
   }
 }
+*,
+::after,
+::before {
+  box-sizing: border-box;
+}
 
 button {
   border-radius: 8px;
@@ -31,7 +39,7 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #101010;
   cursor: pointer;
   transition: border-color 0.25s;
   &:hover {
@@ -50,6 +58,31 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+.gameWrapper {
+  display: grid;
+  grid-template-columns: minmax(150px, 300px) 1fr;
+  width: 100vw;
+  height: 100vh;
+  &.shoot {
+    grid-template-columns: 1fr;
+  }
+  .hand {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr 50px;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #1a1a1a;
+    padding: 10px;
+  }
+  .game {
+    align-self: center;
+    justify-self: center;
+  }
 }
 
 .boardWrapper {
@@ -104,4 +137,10 @@ body {
       }
     }
   }
+}
+.room {
+  position: absolute;
+  letter-spacing: 0.4rem;
+  bottom: 10px;
+  right: 10px;
 }
