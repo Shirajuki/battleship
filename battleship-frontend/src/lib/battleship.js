@@ -21,12 +21,13 @@ export default class Battleship {
     this.shots = shots;
     this.playerTurn = turn; // Update player turn
     this.state = state; // Update game state/phase
-    console.log(turn, state);
   }
 
   getShipIndex(x, y) {
-    return this.ships.findIndex((s, i) =>
-      s.parts.some((p) => x === s.pos.x + p.x && y === s.pos.y + p.y)
+    return this.ships.findIndex((ship) =>
+      ship.parts.some(
+        (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y
+      )
     );
   }
 }

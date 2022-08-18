@@ -13,6 +13,7 @@ const Board = connect(
   let boardStyle = game.state === gameState.place ? "smallBoard" : "bigBoard";
   if (type === "playerBoard")
     boardStyle = game.state === gameState.place ? "bigBoard" : "smallBoard";
+
   const boardLength =
     Math.max.apply(
       null,
@@ -23,12 +24,13 @@ const Board = connect(
     const y = Math.floor(i / board.length);
     const x = i % board[0]?.length;
 
-    const eventHandler = (_event) => {
+    const onClickHandler = (_event) => {
       if (game.state === gameState.shoot) {
         shoot(socket, room, { x: x, y: y });
       }
     };
-    const dropHandler = (item, id) => {
+
+    const onDropHandler = (item, id) => {
       const data = id.split("-");
       console.log(item, data);
       if (game.state === gameState.place)
@@ -40,10 +42,10 @@ const Board = connect(
     return (
       <BoardSquare
         key={i}
-        onClick={eventHandler}
+        onClick={onClickHandler}
         id={`${type}-${x}-${y}`}
         droppable={game.state === gameState.place}
-        onDrop={dropHandler}
+        onDrop={onDropHandler}
       >
         {board[y][x] === 1 && (
           <Ship
