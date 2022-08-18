@@ -16,7 +16,6 @@ const Game = ({ socket, room }) => {
     socket.on("updateBoard", (board) => {
       game.updateBoards(JSON.parse(board));
       rerender();
-      console.log(game);
     });
     return () => {
       socket.off("updateBoard");
