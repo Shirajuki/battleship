@@ -1,7 +1,8 @@
 import { useState, useEffect, useReducer } from "preact/hooks";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import Battleship from "../lib/battleship.js";
-import Board from "./Board";
+import EnemyBoard from "./EnemyBoard";
+import PlayerBoard from "./PlayerBoard";
 import PlayerHand from "./PlayerHand";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -28,8 +29,8 @@ const Game = ({ socket, room }) => {
         <p>Player - {game.playerId}</p>
         <div class="boardWrapper">
           <PlayerHand ships={game.ships} />
-          <Board type={"playerBoard"} game={game} board={game.playerBoard} />
-          <Board type={"enemyBoard"} game={game} board={game.enemyBoard} />
+          <PlayerBoard game={game} board={game.playerBoard} />
+          <EnemyBoard game={game} board={game.enemyBoard} />
         </div>
       </div>
     </DndProvider>

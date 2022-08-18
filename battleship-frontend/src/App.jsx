@@ -27,7 +27,7 @@ const App = connect(
 
     socket.on("startGame", () => {
       setGameStarted(true);
-      console.log("STAAART", isConnected, gameStarted);
+      console.log("STAAART", true);
     });
 
     socket.on("endGame", (status) => {
