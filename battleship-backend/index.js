@@ -72,19 +72,6 @@ io.on("connection", (socket) => {
       const game = new Game(p1, p2);
       games[room] = game;
 
-      // Send initialized board to players
-      /*
-      game.placeShip({ shipIndex: 0, pos: { x: 5, y: 5 }, playerId: p1.id });
-      game.placeShip({ shipIndex: 1, pos: { x: 5, y: 6 }, playerId: p1.id });
-      game.placeShip({ shipIndex: 2, pos: { x: 5, y: 7 }, playerId: p1.id });
-      game.endPlace({ playerId: p1.id });
-      game.placeShip({ shipIndex: 0, pos: { x: 3, y: 5 }, playerId: p2.id });
-      game.placeShip({ shipIndex: 1, pos: { x: 3, y: 6 }, playerId: p2.id });
-      game.placeShip({ shipIndex: 2, pos: { x: 3, y: 7 }, playerId: p2.id });
-      game.endPlace({ playerId: p2.id });
-      game.updateBoards();
-      */
-
       // Send game start signal
       io.to(room).emit("startGame");
       // Send update boards to players
@@ -120,6 +107,22 @@ io.on("connection", (socket) => {
     if ([...socket.rooms].includes(room)) {
       const game = games[room];
       if (game.endPlace(playerId)?.status) finishTurn(game, clients);
+    }
+  });
+
+  socket.on("rematch", async (data) => {
+    const { room, playerId } = data;
+    const clients = await io.in(room).fetchSockets();
+
+    if ([...socket.rooms].includes(room)) {
+      const player =
+        playerId === clients[0].id
+          ? "player1"
+          : playerId === clients[1].id
+          ? "player2"
+          : "";
+      clients[0].emit("pendingRematch", player);
+      clients[1].emit("pendingRematch", player);
     }
   });
 
