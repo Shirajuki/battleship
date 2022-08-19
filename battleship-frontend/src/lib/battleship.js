@@ -10,9 +10,19 @@ export default class Battleship {
     this.shots = [];
     this.playerTurn = true;
     this.state = gameState.place;
+    this.player = "";
   }
 
-  updateBoards({ id, playerBoard, enemyBoard, ships, shots, turn, state }) {
+  updateBoards({
+    id,
+    playerBoard,
+    enemyBoard,
+    ships,
+    shots,
+    turn,
+    state,
+    player,
+  }) {
     // Update game status
     this.playerId = id;
     this.playerBoard = playerBoard.board;
@@ -21,6 +31,7 @@ export default class Battleship {
     this.shots = shots;
     this.playerTurn = turn; // Update player turn
     this.state = state; // Update game state/phase
+    this.player = player;
   }
 
   getShipIndex(x, y) {

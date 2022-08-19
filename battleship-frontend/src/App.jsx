@@ -62,9 +62,9 @@ const App = connect(
       console.log("STAAART", true);
     });
 
-    socket.on("endGame", (status, win) => {
-      setGameEnded({ status: status, info: win });
-      console.log("GAMEEE ENDD", status);
+    socket.on("endGame", (info) => {
+      setGameEnded({ status: true, info: info });
+      console.log("GAMEEE ENDD", info);
     });
 
     socket.on("disconnect", () => {
@@ -108,7 +108,7 @@ const App = connect(
         </div>
         {gameStarted && game && <div class="room">{room}</div>}
       </div>
-      {gameEnded?.status || <GameOverModal info={gameEnded.info} />}
+      {gameEnded?.status && <GameOverModal info={gameEnded.info} />}
     </DndProvider>
   );
 });

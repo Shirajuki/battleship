@@ -23,6 +23,7 @@ const updateBoards = (game, clients) => {
       ...game.p1,
       turn: game.checkPlayerTurn(game.p1.id),
       state: game.phase,
+      player: "player1",
     })
   );
   clients[1].emit(
@@ -31,6 +32,7 @@ const updateBoards = (game, clients) => {
       ...game.p2,
       turn: game.checkPlayerTurn(game.p2.id),
       state: game.phase,
+      player: "player2",
     })
   );
 };
