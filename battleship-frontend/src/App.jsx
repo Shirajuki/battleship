@@ -8,6 +8,7 @@ import Battleship from "./lib/battleship.js";
 import Game from "./components/Game";
 import PlayerHand from "./components/PlayerHand";
 import { gameState } from "./lib/constants.js";
+import GameOverModal from "./components/GameOverModal";
 
 const App = connect(
   ["socket", "room"],
@@ -15,7 +16,7 @@ const App = connect(
 )(({ socket, room, setSocket }) => {
   const [isConnected, setIsConnected] = useState(socket?.connected ?? false);
   const [gameStarted, setGameStarted] = useState(false);
-  const [gameEnded, setGameEnded] = useState(false);
+  const [gameEnded, setGameEnded] = useState({ status: false, win: "" });
   const [game, setGame] = useState(null);
   const [, rerender] = useReducer((x) => x + 1, 0);
 
@@ -61,8 +62,8 @@ const App = connect(
       console.log("STAAART", true);
     });
 
-    socket.on("endGame", (status) => {
-      setGameEnded(true);
+    socket.on("endGame", (status, win) => {
+      setGameEnded({ status: status, info: win });
       console.log("GAMEEE ENDD", status);
     });
 
@@ -107,6 +108,7 @@ const App = connect(
         </div>
         {gameStarted && game && <div class="room">{room}</div>}
       </div>
+      {gameEnded?.status || <GameOverModal info={gameEnded.info} />}
     </DndProvider>
   );
 });

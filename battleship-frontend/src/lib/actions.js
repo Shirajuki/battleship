@@ -24,3 +24,11 @@ export const endPlace = (socket, room) => {
     room: room,
   });
 };
+
+export const rematch = (socket, room) => {
+  console.log("rematch");
+  socket.emit("rematch", {
+    playerId: socket.id,
+    room: room,
+  });
+};

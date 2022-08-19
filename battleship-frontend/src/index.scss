@@ -178,6 +178,60 @@ body {
     }
   }
 }
+.gameOverModal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  & > h2,
+  & > p {
+    color: var(--grey-text);
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -3.5rem);
+    font-family: var(--font-fancy);
+    font-size: 10rem;
+  }
+  & > p {
+    color: var(--text);
+    font-size: 6rem;
+    transform: translate(-50%, 2.5rem);
+  }
+  & > div {
+    & > div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    img {
+      width: 250px;
+      height: 250px;
+    }
+    .rematch {
+      width: 150px;
+      height: 150px;
+      margin: 2rem;
+    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 13rem;
+    padding: 2rem;
+    background-color: #1a1a1a;
+    border-radius: 1rem;
+    button {
+      width: 70%;
+      margin: 0.3rem;
+    }
+  }
+}
 .room {
   position: absolute;
   letter-spacing: 0.3rem;
