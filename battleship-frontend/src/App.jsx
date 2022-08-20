@@ -24,7 +24,7 @@ const App = connect(
   const [, rerender] = useReducer((x) => x + 1, 0);
 
   const joinRoom = () => {
-    socket.emit("create", room);
+    // socket.emit("create", room);
   };
 
   const displayState = (state) => {

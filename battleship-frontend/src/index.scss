@@ -318,6 +318,43 @@ body {
     max-width: 500px;
   }
 }
+.lobbyWrapper {
+  & > h1 {
+    text-align: center;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  & > p {
+    text-align: center;
+    position: absolute;
+    letter-spacing: 0.3rem;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  & > div.players {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    width: 90%;
+    max-width: initial;
+    & > .vs {
+      width: 150px;
+      height: 150px;
+      margin: 2rem;
+    }
+    img {
+      width: 100%;
+      max-width: 300px;
+      &.disabled {
+        filter: grayscale(1);
+      }
+    }
+  }
+}
 .room {
   position: absolute;
   letter-spacing: 0.3rem;

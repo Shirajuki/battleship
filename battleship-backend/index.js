@@ -74,15 +74,20 @@ io.on("connection", (socket) => {
     // Check if room is full before joining
     const sockets = await io.in(room).fetchSockets();
     if (sockets.length >= 2) return;
-    // Join and check if clients enough
+    // Join and check if clients are enough
     socket.join(room);
     const clients = await io.in(room).fetchSockets();
     console.log(clients.length);
+    console.log(clients.map((s) => s.id));
     // Initialize battleship game
     if (clients.length >= 2) {
-      initializeGame(room, clients);
-    }
-    console.log(clients.map((s) => s.id));
+      clients[0].emit("joinedLobby", 2);
+      clients[1].emit("joinedLobby", 2);
+      setTimeout(() => {
+        initializeGame(room, clients);
+        socket.emit("joinedLobby", 0);
+      }, 2000);
+    } else socket.emit("joinedLobby", 1);
   });
 
   socket.on("place", async (data) => {
