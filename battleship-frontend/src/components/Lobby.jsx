@@ -27,18 +27,25 @@ const Lobby = connect(
   };
   const joinGame = (code) => {
     console.log("join game", code);
+    if (code === "") return;
     setRoom(code);
     socket.emit("create", code);
   };
 
   useEffect(() => {
     if (!socket) return;
-    console.log("load");
+    socket.on("games", (games) => {
+      setGames(games);
+      console.log(games);
+    });
+
     socket.on("joinedLobby", (playerCount) => {
       setPlayersInLobby(playerCount);
       console.log(playerCount);
     });
+
     return () => {
+      socket.off("games");
       socket.off("joinedLobby");
     };
   }, [socket]);
@@ -60,7 +67,7 @@ const Lobby = connect(
             />
             <label htmlFor="private">Private game</label>
           </div>
-          <button onClick={hostGame}>Host game</button>
+          <button onClick={hostGame}>Quick host game</button>
           <span>. . .</span>
           <div>
             <input
@@ -68,11 +75,14 @@ const Lobby = connect(
               placeholder="lobby code..."
               onChange={(event) => setLobbyCode(event.target.value)}
             />
-            <button onClick={() => joinGame(lobbyCode)}>join</button>
+            <button onClick={() => joinGame(lobbyCode)}>Host / join</button>
           </div>
           <div>
             {games.map((game) => (
-              <button disabled={game.players > 1}>
+              <button
+                disabled={game.players > 1}
+                onClick={() => joinGame(game.code)}
+              >
                 {game.code} <span>{displayGameStatus(game.players)}</span>
               </button>
             ))}

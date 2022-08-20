@@ -67,8 +67,19 @@ const finishTurn = (game, clients) => {
   updateBoards(game, clients);
 };
 
+const listGames = (io) => {
+  const rooms = [...io.sockets.adapter.rooms]
+    .filter((r) => ![...r[1]].includes(r[0]))
+    .map((r) => {
+      return { code: r[0], players: [...r[1]].length };
+    });
+  console.log(rooms);
+  io.emit("games", rooms);
+};
+
 io.on("connection", (socket) => {
   console.log(`Socket ${socket.id} connected`);
+  listGames(io);
 
   socket.on("create", async (room) => {
     // Check if room is full before joining
@@ -79,6 +90,7 @@ io.on("connection", (socket) => {
     const clients = await io.in(room).fetchSockets();
     console.log(clients.length);
     console.log(clients.map((s) => s.id));
+    listGames(io);
     // Initialize battleship game
     if (clients.length >= 2) {
       clients[0].emit("joinedLobby", 2);
