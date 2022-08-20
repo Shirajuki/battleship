@@ -4,6 +4,9 @@ export class Ship {
     this.pos = { x: -5, y: -5 };
     this.parts = [{ x: 0, y: 0, shot: false, sprite: { x: 0, y: 0 } }];
   }
+  checkSunk() {
+    return this.parts.every((part) => part.shot);
+  }
   place(x, y) {
     this.pos = { x: x, y: y };
     this.placed = true;

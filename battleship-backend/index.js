@@ -118,7 +118,14 @@ io.on("connection", (socket) => {
 
     if ([...socket.rooms].includes(room)) {
       const game = games[room];
-      if (game.shootShip(shootData)?.status) finishTurn(game, clients);
+      const status = game.shootShip(shootData)?.status;
+      if (!status) return;
+      // TODO: Send sunken ship data
+      if (status === 3) {
+        clients[0].emit("shipSunk");
+        clients[1].emit("shipSunk");
+      }
+      finishTurn(game, clients);
     }
   });
 

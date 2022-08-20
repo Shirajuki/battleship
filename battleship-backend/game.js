@@ -105,7 +105,9 @@ class Game {
       console.log(playerId, "hit", pos);
       // Update turn back if hit
       this.turn = (this.turn + 1) % 2;
-      return { status: 1 };
+      // Return status sunk or only hit
+      // sunk = 3, hit = 2, miss = 1
+      return { status: ship.checkSunk() ? 3 : 2 };
     } else {
       console.log(playerId, "missed", pos);
       return { status: 1 };
