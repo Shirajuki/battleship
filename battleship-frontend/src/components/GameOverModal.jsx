@@ -24,11 +24,11 @@ const GameOverModal = connect(
       if (player === "") return;
       setRematchPlayers((p) => {
         const newp = [player, ...p];
-        console.log(newp);
         if (newp.includes("player1") && newp.includes("player2")) {
           console.log("both player rematch...");
           setRequestedRematch(false);
-          return [];
+          setRematchPlayers([]);
+          console.log("getting new game...");
         }
         return newp;
       });

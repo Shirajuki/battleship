@@ -15,6 +15,19 @@ const io = new Server(server, {
   },
 });
 const games = [];
+const rematch = [];
+const initializeGame = (room, clients) => {
+  console.log("Initializing new game...");
+  const p1 = new Player(clients[0].id);
+  const p2 = new Player(clients[1].id);
+  const game = new Game(p1, p2);
+  games[room] = game;
+
+  // Send game start signal
+  io.to(room).emit("startGame");
+  // Send update boards to players
+  updateBoards(game, clients);
+};
 const updateBoards = (game, clients) => {
   game.updateBoards();
   clients[0].emit(
@@ -67,15 +80,7 @@ io.on("connection", (socket) => {
     console.log(clients.length);
     // Initialize battleship game
     if (clients.length >= 2) {
-      const p1 = new Player(clients[0].id);
-      const p2 = new Player(clients[1].id);
-      const game = new Game(p1, p2);
-      games[room] = game;
-
-      // Send game start signal
-      io.to(room).emit("startGame");
-      // Send update boards to players
-      updateBoards(game, clients);
+      initializeGame(room, clients);
     }
     console.log(clients.map((s) => s.id));
   });
@@ -123,6 +128,10 @@ io.on("connection", (socket) => {
           : "";
       clients[0].emit("pendingRematch", player);
       clients[1].emit("pendingRematch", player);
+      if (rematch.includes(room)) {
+        initializeGame(room, clients);
+        delete rematch[room];
+      } else rematch.push(room);
     }
   });
 
