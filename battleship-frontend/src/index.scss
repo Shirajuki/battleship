@@ -165,14 +165,30 @@ body {
       &:hover {
         background-color: #242424;
       }
+
+      .tile {
+        height: 50px;
+        width: 50px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: inherit;
+      }
       .ship {
+        position: relative;
+        background: #fff;
         &.hit {
           color: tomato;
+          background: tomato;
         }
       }
       .marker {
+        position: relative;
+        background: #fff;
         &.hit {
           color: tomato;
+          background: tomato;
         }
       }
     }

@@ -34,11 +34,16 @@ export default class Battleship {
     this.player = player;
   }
 
-  getShipIndex(x, y) {
-    return this.ships.findIndex((ship) =>
+  getShip(x, y) {
+    const shipIndex = this.ships.findIndex((ship) =>
       ship.parts.some(
         (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y
       )
     );
+    const ship = this.ships[shipIndex];
+    const shipPart = ship.parts.find(
+      (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y
+    );
+    return { index: shipIndex, part: shipPart };
   }
 }
