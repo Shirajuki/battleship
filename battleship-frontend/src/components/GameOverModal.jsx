@@ -1,5 +1,6 @@
 import player1 from "../assets/player1.png";
 import player2 from "../assets/player2.png";
+import load from "../assets/load.png";
 import { connect } from "unistore/preact";
 import { actions } from "../lib/state";
 import { rematch } from "../lib/actions";
@@ -28,7 +29,7 @@ const GameOverModal = connect(
           console.log("both player rematch...");
           setRequestedRematch(false);
           setRematchPlayers([]);
-          console.log("getting new game...");
+          console.log("getting new game...", p);
         }
         return newp;
       });
@@ -44,38 +45,32 @@ const GameOverModal = connect(
       <p>{info.text}</p>
       <div>
         <div>
-          {(rematchPlayers.includes("player1") && (
+          {rematchPlayers.includes("player1") ? (
             <img
               class="rematch"
               src={player1}
               alt="player1 rematch indicator"
             />
-          )) ||
-            (rematchPlayers.length > 1 && (
-              <img
-                class="rematch"
-                src={player1}
-                alt="player1 rematch indicator"
-              />
-            ))}
+          ) : rematchPlayers.length === 1 ? (
+            <img class="rematch" src={load} alt="loading indicator" />
+          ) : (
+            <></>
+          )}
           <img
             src={info.player === "player1" ? player1 : player2}
             alt={`${info.player} indicator`}
           />
-          {(rematchPlayers.includes("player2") && (
+          {rematchPlayers.includes("player2") ? (
             <img
               class="rematch"
               src={player2}
               alt="player2 rematch indicator"
             />
-          )) ||
-            (rematchPlayers.length > 1 && (
-              <img
-                class="rematch"
-                src={player2}
-                alt="player2 rematch indicator"
-              />
-            ))}
+          ) : rematchPlayers.length === 1 ? (
+            <img class="rematch" src={load} alt="loading indicator" />
+          ) : (
+            <></>
+          )}
         </div>
         <button onClick={rematchHandler}>Rematch</button>
         <button onClick={() => (window.location.href = "/")}>

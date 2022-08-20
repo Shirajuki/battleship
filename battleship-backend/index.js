@@ -129,8 +129,8 @@ io.on("connection", (socket) => {
       clients[0].emit("pendingRematch", player);
       clients[1].emit("pendingRematch", player);
       if (rematch.includes(room)) {
-        initializeGame(room, clients);
-        delete rematch[room];
+        setTimeout(() => initializeGame(room, clients), 2000);
+        rematch.splice(rematch.indexOf(room), 1);
       } else rematch.push(room);
     }
   });
