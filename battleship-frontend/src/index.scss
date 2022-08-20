@@ -150,6 +150,9 @@ body {
       height: 250px;
       .boardSquare {
         border-radius: 2.5px;
+        .tile {
+          zoom: 0.48;
+        }
       }
     }
 
