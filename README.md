@@ -5,11 +5,11 @@
 <h1 align="center">Battleship ⚓</h1>
 
 <p align="center">
-  <a href="https://github.com/Shirajuki/aqua/blob/main/LICENSE" alt="LICENSE">
-    <img src="https://img.shields.io/github/license/Shirajuki/aqua" />
+  <a href="https://github.com/Shirajuki/battleship/blob/main/LICENSE" alt="LICENSE">
+    <img src="https://img.shields.io/github/license/Shirajuki/battleship" />
   </a>
-  <a href="https://github.com/Shirajuki/aqua/issues" alt="Issues">
-    <img src="https://img.shields.io/github/issues/Shirajuki/aqua" />
+  <a href="https://github.com/Shirajuki/aqua/battleship" alt="Issues">
+    <img src="https://img.shields.io/github/issues/Shirajuki/battleship" />
   </a>
 </p>
 
