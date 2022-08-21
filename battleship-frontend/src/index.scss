@@ -239,6 +239,11 @@ body {
       width: 125px;
       height: 125px;
       margin: 2rem;
+      &.loading {
+        width: 75px;
+        height: 75px;
+        margin: calc(2rem + 25px);
+      }
     }
     display: flex;
     flex-direction: column;

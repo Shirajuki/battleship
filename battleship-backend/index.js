@@ -18,8 +18,8 @@ const games = [];
 const rematch = [];
 const initializeGame = (room, clients) => {
   console.log("Initializing new game...");
-  const p1 = new Player(clients[0].id);
-  const p2 = new Player(clients[1].id);
+  const p1 = new Player(clients[0].id, "player1");
+  const p2 = new Player(clients[1].id, "player2");
   const game = new Game(p1, p2);
   games[room] = game;
 
@@ -29,6 +29,7 @@ const initializeGame = (room, clients) => {
   updateBoards(game, clients);
 };
 const updateBoards = (game, clients) => {
+  if (clients.length !== 2) return;
   game.updateBoards();
   clients[0].emit(
     "updateBoard",
@@ -36,7 +37,6 @@ const updateBoards = (game, clients) => {
       ...game.p1,
       turn: game.checkPlayerTurn(game.p1.id),
       state: game.phase,
-      player: "player1",
     })
   );
   clients[1].emit(
@@ -45,24 +45,23 @@ const updateBoards = (game, clients) => {
       ...game.p2,
       turn: game.checkPlayerTurn(game.p2.id),
       state: game.phase,
-      player: "player2",
     })
   );
 };
 const finishTurn = (game, clients) => {
+  if (clients.length !== 2) return;
   // Check win
   const win = game.checkWin();
   if (win) {
     clients[0].emit("endGame", {
       text: win?.player === game.p1.id ? "Win" : "Lose",
-      player: "player1",
+      player: game.p1.player,
     });
     clients[1].emit("endGame", {
       text: win?.player === game.p2.id ? "Win" : "Lose",
-      player: "player2",
+      player: game.p2.player,
     });
   }
-
   // Update boards
   updateBoards(game, clients);
 };
@@ -92,13 +91,13 @@ io.on("connection", (socket) => {
     console.log(clients.map((s) => s.id));
     listGames(io);
     // Initialize battleship game
-    if (clients.length >= 2) {
+    if (clients.length === 2) {
       clients[0].emit("joinedLobby", 2);
       clients[1].emit("joinedLobby", 2);
       setTimeout(() => {
         initializeGame(room, clients);
         socket.emit("joinedLobby", 0);
-      }, 2000);
+      }, 1500);
     } else socket.emit("joinedLobby", 1);
   });
 
@@ -118,12 +117,12 @@ io.on("connection", (socket) => {
 
     if ([...socket.rooms].includes(room)) {
       const game = games[room];
-      const status = game.shootShip(shootData)?.status;
+      const { status, ship } = game.shootShip(shootData);
+      console.log(status, ship);
       if (!status) return;
-      // TODO: Send sunken ship data
-      if (status === 3) {
-        clients[0].emit("shipSunk");
-        clients[1].emit("shipSunk");
+      if (status === 3 && clients.length === 2) {
+        clients[0].emit("shipSunk", ship);
+        clients[1].emit("shipSunk", ship);
       }
       finishTurn(game, clients);
     }
@@ -135,7 +134,17 @@ io.on("connection", (socket) => {
 
     if ([...socket.rooms].includes(room)) {
       const game = games[room];
-      if (game.endPlace(playerId)?.status) finishTurn(game, clients);
+      if (game.endPlace(playerId)?.status && clients.length === 2) {
+        clients[0].emit(
+          "endPlace",
+          game.getPlayerById(playerId.playerId).player
+        );
+        clients[1].emit(
+          "endPlace",
+          game.getPlayerById(playerId.playerId).player
+        );
+        finishTurn(game, clients);
+      }
     }
   });
 

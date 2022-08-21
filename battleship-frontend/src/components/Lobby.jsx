@@ -39,8 +39,6 @@ const Lobby = connect(
       console.log(games);
     });
 
-    socket.emit("create", room);
-
     socket.on("joinedLobby", (playerCount) => {
       setPlayersInLobby(playerCount);
       console.log(playerCount);

@@ -3,6 +3,10 @@ import { gameState } from "./constants";
 export default class Battleship {
   constructor(room) {
     this.room = room;
+    this.init();
+  }
+
+  init() {
     this.playerId = "";
     this.playerBoard = [];
     this.enemyBoard = [];
@@ -11,9 +15,11 @@ export default class Battleship {
     this.playerTurn = true;
     this.state = gameState.place;
     this.player = "";
+    this.placed = false;
+    this.sunkenShips = [];
   }
 
-  updateBoards({
+  updateGame({
     id,
     playerBoard,
     enemyBoard,
@@ -25,13 +31,33 @@ export default class Battleship {
   }) {
     // Update game status
     this.playerId = id;
+    this.player = player;
     this.playerBoard = playerBoard.board;
     this.enemyBoard = enemyBoard.board;
     this.ships = ships;
     this.shots = shots;
     this.playerTurn = turn; // Update player turn
     this.state = state; // Update game state/phase
-    this.player = player;
+  }
+
+  shipSunk(ship) {
+    this.sunkenShips.push(ship);
+  }
+
+  getSunkenShip(x, y) {
+    const shipIndex = this.sunkenShips
+      .filter((ship) => ship.player === this.player)
+      .findIndex((ship) =>
+        ship.parts.some(
+          (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y
+        )
+      );
+    if (shipIndex === -1) return null;
+    const ship = this.sunkenShips[shipIndex];
+    const shipPart = ship.parts.find(
+      (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y
+    );
+    return { index: shipIndex, part: shipPart };
   }
 
   getShip(x, y) {
@@ -40,6 +66,7 @@ export default class Battleship {
         (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y
       )
     );
+    if (shipIndex === -1) return null;
     const ship = this.ships[shipIndex];
     const shipPart = ship.parts.find(
       (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y

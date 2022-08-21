@@ -1,6 +1,9 @@
 import Parts from "../assets/parts.png";
+import Ship from "./Ship";
 
-const Marker = ({ hit }) => {
+const Marker = ({ hit, ship }) => {
+  if (ship && hit) return <Ship hit={hit} ship={ship} />;
+
   return (
     <div class={`marker ${hit ? "hit" : ""}`}>
       <div

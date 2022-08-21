@@ -52,7 +52,7 @@ const GameOverModal = connect(
               alt="player1 rematch indicator"
             />
           ) : rematchPlayers.length === 1 ? (
-            <img class="rematch" src={load} alt="loading indicator" />
+            <img class="rematch loading" src={load} alt="loading indicator" />
           ) : (
             <></>
           )}
@@ -67,7 +67,7 @@ const GameOverModal = connect(
               alt="player2 rematch indicator"
             />
           ) : rematchPlayers.length === 1 ? (
-            <img class="rematch" src={load} alt="loading indicator" />
+            <img class="rematch loading" src={load} alt="loading indicator" />
           ) : (
             <></>
           )}

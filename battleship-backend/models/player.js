@@ -71,8 +71,9 @@ const getRandomBuild = () => {
 };
 
 class Player {
-  constructor(id) {
+  constructor(id, player) {
     this.id = id;
+    this.player = player;
     this.playerBoard = new PlayerBoard(10, 10);
     this.enemyBoard = new EnemyBoard(10, 10);
     this.ships = getRandomBuild();

@@ -109,7 +109,12 @@ class Game {
       this.turn = (this.turn + 1) % 2;
       // Return status sunk or only hit
       // sunk = 3, hit = 2, miss = 1
-      return { status: ship.checkSunk() ? 3 : 2 };
+      if (ship.checkSunk())
+        return {
+          status: 3,
+          ship: { ...ship, player: this.getPlayerByTurn().player },
+        };
+      return { status: 2 };
     } else {
       console.log(playerId, "missed", pos);
       return { status: 1 };

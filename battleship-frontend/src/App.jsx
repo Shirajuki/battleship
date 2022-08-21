@@ -39,7 +39,7 @@ const App = connect(
   const displayStatus = (game) => {
     if (game.state === gameState.shoot)
       return game.playerTurn ? "Your turn" : "Enemy turn";
-    return ""; // TODO: add end turn display
+    return game.placed ? "Waiting for other player..." : ""; // TODO: add end turn display
   };
 
   useEffect(() => {
@@ -58,6 +58,7 @@ const App = connect(
     socket.on("startGame", () => {
       setGameStarted(true);
       setGameEnded({ status: false, info: {} });
+      game?.init();
       console.log("STAAART", true);
     });
 
@@ -74,10 +75,21 @@ const App = connect(
       if (!game)
         setGame((_) => {
           const g = new Battleship(room);
-          g.updateBoards(JSON.parse(board));
+          g.updateGame(JSON.parse(board));
           return g;
         });
-      else game.updateBoards(JSON.parse(board));
+      else game.updateGame(JSON.parse(board));
+      rerender();
+    });
+
+    socket.on("shipSunk", (ship) => {
+      console.log(ship);
+      if (game) game.shipSunk(ship);
+      rerender();
+    });
+
+    socket.on("endPlace", (player) => {
+      if (game && game.player === player) game.placed = true;
       rerender();
     });
 
@@ -86,9 +98,11 @@ const App = connect(
       socket.off("startGame");
       socket.off("updateBoard");
       socket.off("endGame");
+      socket.off("shipSunk");
+      socket.off("endPlace");
       socket.off("disconnect");
     };
-  }, [socket]);
+  }, [socket, game]);
 
   return (
     <DndProvider backend={HTML5Backend}>
