@@ -3,7 +3,7 @@ import Marker from "./Marker";
 import Ship from "./Ship";
 
 const BoardSquare = ({ tile, onClick, onDrop, droppable, x, y, game }) => {
-  const [{ _isOver }, dropRef] = useDrop({
+  const [{ isOver }, dropRef] = useDrop({
     accept: "ship",
     drop: (item) => onDrop(item, x, y),
     collect: (monitor) => ({
@@ -28,7 +28,10 @@ const BoardSquare = ({ tile, onClick, onDrop, droppable, x, y, game }) => {
 
   return (
     <div class="boardSquare" ref={droppable ? dropRef : null} onClick={onClick}>
-      <div>{renderTile(tile)}</div>
+      <div>
+        {renderTile(tile)}
+        {isOver && "x"}
+      </div>
     </div>
   );
 };

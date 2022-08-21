@@ -2,7 +2,7 @@ import { useDrag } from "react-dnd";
 import Ships from "../assets/ships.png";
 
 const ShipDraggable = ({ index, ship }) => {
-  const [{ isDragging }, dragRef] = useDrag({
+  const [{ _isDragging }, dragRef] = useDrag({
     type: "ship",
     item: { index },
     collect: (monitor) => ({
