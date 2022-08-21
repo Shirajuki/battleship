@@ -1,4 +1,4 @@
-import Ships from "../assets/ships.png";
+import Parts from "../assets/parts.png";
 
 const Marker = ({ hit }) => {
   return (
@@ -6,8 +6,8 @@ const Marker = ({ hit }) => {
       <div
         class="tile"
         style={{
-          mask: `url(${Ships}) left center`,
-          WebkitMask: `url(${Ships}) left center`,
+          mask: `url(${Parts}) left center`,
+          WebkitMask: `url(${Parts}) left center`,
           maskPosition: `${-50 * 3}px ${-50 * 3}px`,
           WebkitMaskPosition: `${-50 * 3}px ${-50 * 3}px`,
         }}

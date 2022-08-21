@@ -23,10 +23,6 @@ const App = connect(
   const [game, setGame] = useState(null);
   const [, rerender] = useReducer((x) => x + 1, 0);
 
-  const joinRoom = () => {
-    socket.emit("create", room);
-  };
-
   const displayState = (state) => {
     switch (state) {
       case gameState.place:
@@ -50,12 +46,11 @@ const App = connect(
     const newSocket = io(`http://${window.location.hostname}:3000`);
     setSocket(newSocket);
     return () => newSocket.close();
-  }, [setSocket]);
+  }, []);
 
   useEffect(() => {
     if (!socket) return;
     socket.on("connect", () => {
-      joinRoom();
       setIsConnected(true);
       console.log("connected", room, socket.id);
     });

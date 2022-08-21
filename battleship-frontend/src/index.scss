@@ -80,6 +80,12 @@ body {
     width: 100%;
     background-color: #1a1a1a;
     padding: 10px;
+    & > div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
   }
   .game {
     height: 100%;
@@ -108,6 +114,7 @@ body {
 
 .boardWrapper {
   display: flex;
+  margin-top: 5rem;
   .board {
     position: relative;
     display: grid;
@@ -129,9 +136,6 @@ body {
       border-top: none;
       padding: 1px;
       font-size: 0.8rem;
-    }
-    &.playerBoard {
-      // border-color: tomato;
     }
     &.enemyBoard {
       // border-color: lime;
@@ -265,10 +269,14 @@ body {
     width: 90%;
     max-width: 500px;
     margin: 0;
-    &:nth-of-type(2) {
+    form {
       display: grid;
       grid-template-columns: 1fr 30%;
       grid-gap: 1rem;
+      width: 100%;
+      button {
+        width: 100%;
+      }
     }
     &:last-of-type {
       flex-direction: column;

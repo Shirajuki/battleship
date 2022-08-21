@@ -39,6 +39,8 @@ const Lobby = connect(
       console.log(games);
     });
 
+    socket.emit("create", room);
+
     socket.on("joinedLobby", (playerCount) => {
       setPlayersInLobby(playerCount);
       console.log(playerCount);
@@ -70,12 +72,20 @@ const Lobby = connect(
           <button onClick={hostGame}>Quick host game</button>
           <span>. . .</span>
           <div>
-            <input
-              type="text"
-              placeholder="lobby code..."
-              onChange={(event) => setLobbyCode(event.target.value)}
-            />
-            <button onClick={() => joinGame(lobbyCode)}>Host / join</button>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+                joinGame(lobbyCode);
+              }}
+            >
+              <input
+                type="text"
+                maxLength={20}
+                placeholder="lobby code..."
+                onChange={(event) => setLobbyCode(event.target.value)}
+              />
+              <button type="submit">Host / join</button>
+            </form>
           </div>
           <div>
             {games.map((game) => (

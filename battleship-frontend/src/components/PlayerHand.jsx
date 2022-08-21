@@ -11,7 +11,8 @@ const PlayerHand = connect(
     <div class="hand">
       <div>
         {ships.map((ship, index) => {
-          if (!ship.placed) return <ShipDraggable draggable index={index} />;
+          if (!ship.placed)
+            return <ShipDraggable draggable index={index} ship={ship} />;
         })}
       </div>
       <button onClick={() => endPlace(socket, room)}>end turn</button>

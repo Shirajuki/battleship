@@ -79,5 +79,8 @@ class Player {
     this.shots = [];
     this.placing = true;
   }
+  canEndPlace() {
+    return this.ships.every((ship) => ship.placed);
+  }
 }
 export default Player;

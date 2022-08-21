@@ -74,6 +74,8 @@ class Game {
     const player = this.getPlayerById(playerId);
     if (this.phase !== phase.place || !player.placing) return { status: 0 };
 
+    // Can end ship placement
+    if (!player.canEndPlace()) return { status: 0 };
     // Update player placing status
     player.placing = false;
 

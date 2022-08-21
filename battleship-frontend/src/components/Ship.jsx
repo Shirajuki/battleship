@@ -1,5 +1,5 @@
 import { useDrag } from "react-dnd";
-import Ships from "../assets/ships.png";
+import Parts from "../assets/parts.png";
 
 const Ship = ({ hit, ship, drag = false }) => {
   const [{ _isDragging }, dragRef] = useDrag({
@@ -15,8 +15,8 @@ const Ship = ({ hit, ship, drag = false }) => {
       <div
         class="tile"
         style={{
-          mask: `url(${Ships}) left center`,
-          WebkitMask: `url(${Ships}) left center`,
+          mask: `url(${Parts}) left center`,
+          WebkitMask: `url(${Parts}) left center`,
           maskPosition: `${-50 * ship.part.sprite.x}px ${
             -50 * ship.part.sprite.y
           }px`,
