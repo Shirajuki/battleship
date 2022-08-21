@@ -43,7 +43,8 @@ const App = connect(
   };
 
   useEffect(() => {
-    const newSocket = io(`http://${window.location.hostname}:3000`);
+    // const newSocket = io(`http://${window.location.hostname}:3000`);
+    const newSocket = io(`https://shirajuki-battleship-backend.herokuapp.com/`);
     setSocket(newSocket);
     return () => newSocket.close();
   }, []);
