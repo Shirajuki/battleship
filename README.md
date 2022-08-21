@@ -1,4 +1,4 @@
-<p align="center"><img src="./Atago.png" alt="Minato_Aqua" height="400" /></p>
+<p align="center"><img src="./Atago.png" alt="Atago" height="400" /></p>
 <p>
   <a href="https://azurlane.koumakan.jp/wiki/Atago#/media/File:Atago.png" style="color: gray; font-size: 10px;text-decoration: none">Illustration from Azur Lane Wiki</a>
 </p>
@@ -13,9 +13,11 @@
   </a>
 </p>
 
-A Work In Progress multiplayer websocket Battleship game ⚓
+A Work In Progress multiplayer turn-based websocket Battleship game 🚢💥
 
-<!-- Play the demo here: https://shirajuki.js.org/battleship/ -->
+Play the demo here: https://shirajuki.js.org/battleship/
+
+<p align="center"><img src="./image.png" alt="game overview" /></p>
 
 ## Built With
 
@@ -26,7 +28,7 @@ A Work In Progress multiplayer websocket Battleship game ⚓
 - CSS3
 - Socket.io
 
-## TODO
+## Todolist (that will probably never be completed)
 
 - [x] Fix DnD library to be more lightweight
 - [x] Style the game better overall
