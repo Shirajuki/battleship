@@ -17,11 +17,11 @@ const Ship = ({ hit, ship, drag = false }) => {
         style={{
           mask: `url(${Parts}) left center`,
           WebkitMask: `url(${Parts}) left center`,
-          maskPosition: `${-50 * ship.part.sprite.x}px ${
-            -50 * ship.part.sprite.y
+          maskPosition: `${-50 * ship.part.sprite?.x}px ${
+            -50 * ship.part.sprite?.y
           }px`,
-          WebkitMaskPosition: `${-50 * ship.part.sprite.x}px ${
-            -50 * ship.part.sprite.y
+          WebkitMaskPosition: `${-50 * ship.part.sprite?.x}px ${
+            -50 * ship.part.sprite?.y
           }px`,
         }}
       />

@@ -9,6 +9,7 @@ class Game {
     this.p2 = player2;
     this.turn = 0;
     this.phase = phase.place;
+    this.sunkenShips = [];
   }
   checkPlayerTurn(playerID) {
     if (this.phase == phase.end) return false;
@@ -58,7 +59,6 @@ class Game {
         )
       )
     );
-    console.log(shipPlacements, x, y, ship);
     return shipPlacements;
   }
   placeShip({ shipIndex, pos, playerId }) {
@@ -104,19 +104,21 @@ class Game {
     this.turn = (this.turn + 1) % 2;
     const shot = ship?.shoot(pos.x, pos.y);
     if (shot) {
-      console.log(playerId, "hit", pos);
       // Update turn back if hit
       this.turn = (this.turn + 1) % 2;
       // Return status sunk or only hit
       // sunk = 3, hit = 2, miss = 1
-      if (ship.checkSunk())
+      if (ship.checkSunk()) {
+        this.sunkenShips.push({
+          ...ship,
+          player: this.getPlayerByTurn().player,
+        });
         return {
           status: 3,
-          ship: { ...ship, player: this.getPlayerByTurn().player },
         };
+      }
       return { status: 2 };
     } else {
-      console.log(playerId, "missed", pos);
       return { status: 1 };
     }
   }
@@ -130,15 +132,11 @@ class Game {
     );
 
     if (p1) {
-      console.log(this.p2.id);
       this.phase = phase.end;
       return { player: this.p2.id };
     } else if (p2) {
-      console.log(this.p1.id);
       this.phase = phase.end;
       return { player: this.p1.id };
-    } else {
-      console.log("No win");
     }
   }
 
@@ -147,13 +145,6 @@ class Game {
     this.p1.enemyBoard.update(this.p2.ships, this.p1.shots);
     this.p2.playerBoard.update(this.p2.ships, this.p1.shots);
     this.p2.enemyBoard.update(this.p1.ships, this.p2.shots);
-  }
-
-  displayBoards() {
-    this.p1.playerBoard.draw();
-    this.p1.enemyBoard.draw();
-    // this.p2.playerBoard.draw();
-    // this.p2.enemyBoard.draw();
   }
 }
 export default Game;

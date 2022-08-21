@@ -15,18 +15,15 @@ const Lobby = connect(
   const [playersInLobby, setPlayersInLobby] = useState(0);
 
   const hostGame = () => {
-    console.log("host game");
     const alph = "abcdefghijklmnopqrstuvwxyz0123456789";
     const room = Array.from(
       "000000",
       () => alph[Math.floor(Math.random() * alph.length)]
     ).join("");
-    console.log(room);
     setRoom(room);
     socket.emit("create", room);
   };
   const joinGame = (code) => {
-    console.log("join game", code);
     if (code === "") return;
     setRoom(code);
     socket.emit("create", code);
@@ -36,12 +33,10 @@ const Lobby = connect(
     if (!socket) return;
     socket.on("games", (games) => {
       setGames(games);
-      console.log(games);
     });
 
     socket.on("joinedLobby", (playerCount) => {
       setPlayersInLobby(playerCount);
-      console.log(playerCount);
     });
 
     return () => {
@@ -58,7 +53,7 @@ const Lobby = connect(
     <div class="lobbyWrapper">
       {playersInLobby === 0 ? (
         <>
-          <div>
+          <div style={{ display: "none" }}>
             <input
               type="checkbox"
               name="private"

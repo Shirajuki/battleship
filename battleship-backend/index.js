@@ -69,10 +69,10 @@ const finishTurn = (game, clients) => {
 const listGames = (io) => {
   const rooms = [...io.sockets.adapter.rooms]
     .filter((r) => ![...r[1]].includes(r[0]))
+    .filter((r) => games[r[0]]?.phase !== 2)
     .map((r) => {
       return { code: r[0], players: [...r[1]].length };
     });
-  console.log(rooms);
   io.emit("games", rooms);
 };
 
@@ -87,8 +87,6 @@ io.on("connection", (socket) => {
     // Join and check if clients are enough
     socket.join(room);
     const clients = await io.in(room).fetchSockets();
-    console.log(clients.length);
-    console.log(clients.map((s) => s.id));
     listGames(io);
     // Initialize battleship game
     if (clients.length === 2) {
@@ -117,12 +115,11 @@ io.on("connection", (socket) => {
 
     if ([...socket.rooms].includes(room)) {
       const game = games[room];
-      const { status, ship } = game.shootShip(shootData);
-      console.log(status, ship);
+      const { status } = game.shootShip(shootData);
       if (!status) return;
       if (status === 3 && clients.length === 2) {
-        clients[0].emit("shipSunk", ship);
-        clients[1].emit("shipSunk", ship);
+        clients[0].emit("shipSunk", JSON.stringify(game.sunkenShips));
+        clients[1].emit("shipSunk", JSON.stringify(game.sunkenShips));
       }
       finishTurn(game, clients);
     }
@@ -169,10 +166,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log("User disconnected");
   });
 });
 
 server.listen(3000, () => {
-  console.log("listening on *:3000");
+  console.log("Listening on *:3000");
 });

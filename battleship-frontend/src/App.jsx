@@ -52,19 +52,17 @@ const App = connect(
     if (!socket) return;
     socket.on("connect", () => {
       setIsConnected(true);
-      console.log("connected", room, socket.id);
+      console.log("Connected", room, socket.id);
     });
 
     socket.on("startGame", () => {
       setGameStarted(true);
       setGameEnded({ status: false, info: {} });
       game?.init();
-      console.log("STAAART", true);
     });
 
     socket.on("endGame", (info) => {
       setGameEnded({ status: true, info: info });
-      console.log("GAMEEE ENDD", info);
     });
 
     socket.on("disconnect", () => {
@@ -82,9 +80,8 @@ const App = connect(
       rerender();
     });
 
-    socket.on("shipSunk", (ship) => {
-      console.log(ship);
-      if (game) game.shipSunk(ship);
+    socket.on("shipSunk", (ships) => {
+      if (game) game.shipSunk(JSON.parse(ships));
       rerender();
     });
 

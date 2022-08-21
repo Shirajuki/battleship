@@ -21,15 +21,12 @@ const GameOverModal = connect(
   useEffect(() => {
     if (!socket) return;
     socket.on("pendingRematch", (player) => {
-      console.log(player);
       if (player === "") return;
       setRematchPlayers((p) => {
         const newp = [player, ...p];
         if (newp.includes("player1") && newp.includes("player2")) {
-          console.log("both player rematch...");
           setRequestedRematch(false);
           setRematchPlayers([]);
-          console.log("getting new game...", p);
         }
         return newp;
       });

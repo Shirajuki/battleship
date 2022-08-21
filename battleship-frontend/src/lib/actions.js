@@ -1,5 +1,4 @@
 export const shoot = (socket, room, pos) => {
-  console.log("shoot");
   socket.emit("shoot", {
     pos: pos,
     playerId: socket.id,
@@ -8,7 +7,6 @@ export const shoot = (socket, room, pos) => {
 };
 
 export const place = (socket, room, pos, shipIndex) => {
-  console.log("place");
   socket.emit("place", {
     shipIndex: shipIndex,
     pos: pos,
@@ -18,7 +16,6 @@ export const place = (socket, room, pos, shipIndex) => {
 };
 
 export const endPlace = (socket, room) => {
-  console.log("endplace");
   socket.emit("endPlace", {
     playerId: socket.id,
     room: room,
@@ -26,7 +23,6 @@ export const endPlace = (socket, room) => {
 };
 
 export const rematch = (socket, room) => {
-  console.log("rematch");
   socket.emit("rematch", {
     playerId: socket.id,
     room: room,

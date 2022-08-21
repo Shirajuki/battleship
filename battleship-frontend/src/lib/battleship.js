@@ -40,18 +40,23 @@ export default class Battleship {
     this.state = state; // Update game state/phase
   }
 
-  shipSunk(ship) {
-    this.sunkenShips.push(ship);
+  shipSunk(ships) {
+    this.sunkenShips = ships;
   }
 
   getSunkenShip(x, y) {
     const shipIndex = this.sunkenShips
-      .filter((ship) => ship.player === this.player)
+      .map((ship) => {
+        // Hide non correct player sunken ships
+        if (ship.player !== this.player) ship.pos = { x: 100, y: 100 };
+        return ship;
+      })
       .findIndex((ship) =>
         ship.parts.some(
           (part) => x === ship.pos.x + part.x && y === ship.pos.y + part.y
         )
       );
+
     if (shipIndex === -1) return null;
     const ship = this.sunkenShips[shipIndex];
     const shipPart = ship.parts.find(

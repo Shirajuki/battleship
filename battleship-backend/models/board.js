@@ -20,12 +20,6 @@ class Board {
       }
     }
   }
-  draw() {
-    console.log();
-    this.board.forEach((row) => {
-      console.log(row.join(" "));
-    });
-  }
 }
 
 export class PlayerBoard extends Board {
