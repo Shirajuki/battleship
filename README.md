@@ -17,6 +17,8 @@ A Work In Progress multiplayer turn-based websocket Battleship game 🚢💥
 
 Play the demo here: https://shirajuki.js.org/battleship/
 
+- NB: Make sure the backend-server is up and running by visiting this link first: https://shirajuki-battleship-backend.herokuapp.com/
+
 <p align="center"><img src="./image.png" alt="game overview" /></p>
 
 ## Built With
