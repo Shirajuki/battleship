@@ -170,6 +170,9 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/", (_req, res) => {
+  res.json("Battleship server online...");
+});
 server.listen(3000, () => {
   console.log("Listening on *:3000");
 });
